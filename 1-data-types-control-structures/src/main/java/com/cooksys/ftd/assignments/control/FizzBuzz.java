@@ -2,6 +2,8 @@ package com.cooksys.ftd.assignments.control;
 
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
+import java.util.Arrays;
+import java.util.ArrayList;
 /**
  * FizzBuzz is an old programming exercise.
  * The goal is to iterate over a range of numbers and print a message about each number's divisibility.
@@ -26,7 +28,10 @@ public class FizzBuzz {
      * @throws IllegalArgumentException if b is zero
      */
     public static boolean divides(int a, int b) throws IllegalArgumentException {
-        throw new NotImplementedException();
+    	if(b <= 0){
+    		throw new IllegalArgumentException();
+    	}
+    	return a % b == 0;
     }
 
     /**
@@ -41,7 +46,16 @@ public class FizzBuzz {
      * @return a message according to the format above, or null if n is not divisible by either 3 or 5
      */
     public static String message(int n) {
-        throw new NotImplementedException();
+        String result = null;
+        if(divides(n,3)){
+        	result = "Fizz";
+        }
+        if(divides(n,5)){
+        	if(result == null) result = "";
+        	result = result + "Buzz";
+        }
+        if(result==null)return null;
+        return n + ": "+ result;
     }
 
     /**
@@ -55,7 +69,18 @@ public class FizzBuzz {
      * @throws IllegalArgumentException if the given end is less than the given start
      */
     public static String[] messages(int start, int end) throws IllegalArgumentException {
-        throw new NotImplementedException();
+    	if (start < 0 || end < 0 || end < start){
+    		throw new IllegalArgumentException();
+    	}
+    	ArrayList<String> result = new ArrayList<String>();
+    	for(int i = 0; i < end - start; ++i) {
+    		if(message(start+i) != null){
+    			result.add(message(start+i));
+    		}
+        }
+    	String[] temp = new String[result.size()];
+    	for(int i = 0; i < temp.length; i++) temp[i] = result.get(i);
+    	return temp;
     }
 
     /**
@@ -63,7 +88,11 @@ public class FizzBuzz {
      * the relevant messages to sysout
      */
     public static void main(String[] args) {
-        throw new NotImplementedException();
+    	String mes[] = messages(1,116);
+        for(int i = 0; i < mes.length; ++i){
+        	System.out.println(mes[i]);
+        	
+        }
     }
 
 }
