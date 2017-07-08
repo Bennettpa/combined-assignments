@@ -34,24 +34,12 @@ public class MegaCorp implements Hierarchy<Capitalist, FatCat> {
 	 */
 	@Override
 	public boolean add(Capitalist capitalist) {
-		// if capitalist is null or is in the hierarchy return false
-		if (capitalist == null || this.has(capitalist))
+		if (capitalist == null || this.has(capitalist) || 
+				(capitalist instanceof WageSlave && !(capitalist.hasParent()))) 
 			return false;
-		// if capitalist has a parent
-		if (capitalist.hasParent()) {
-			// if the parent is not in the hierarchy add the parent then the
-			// capitalist and return true
-			if (!this.has(capitalist.getParent()))
-				this.add(capitalist.getParent());
-			corp.add(capitalist);
-			return true;
-		}
-		// if capitalist is not a parent and is a child return false
-		if (capitalist instanceof FatCat) {
-			corp.add(capitalist);
-			return true;
-		}
-		return false;
+		this.add(capitalist.getParent());
+		corp.add(capitalist);
+		return true;
 	}
 
 	/**
@@ -82,9 +70,7 @@ public class MegaCorp implements Hierarchy<Capitalist, FatCat> {
 	public Set<FatCat> getParents() {
 		HashSet<FatCat> parents = new HashSet<FatCat>();
 		corp.forEach(capitalist -> {
-			if (capitalist instanceof FatCat) {
-				parents.add((FatCat) capitalist);
-			}
+			if (capitalist instanceof FatCat) parents.add((FatCat) capitalist);
 		});
 		return parents;
 	}
@@ -100,14 +86,11 @@ public class MegaCorp implements Hierarchy<Capitalist, FatCat> {
 	public Set<Capitalist> getChildren(FatCat fatCat) {
 		HashSet<Capitalist> children = new HashSet<Capitalist>();
 		// if fatCat is null return empty set
-		if (fatCat == null || !(this.has(fatCat)))
-			return children;
+		if (fatCat == null || !(this.has(fatCat))) return children;
 		// Check every capitalist in hierarchy and see if the parent is equal
 		// fatCat if so add it to children
 		corp.forEach(capitalist -> {
-			if (capitalist.hasParent() && capitalist.getParent().equals(fatCat)) {
-				children.add(capitalist);
-			}
+			if (capitalist.hasParent() && capitalist.getParent().equals(fatCat)) children.add(capitalist);
 		});
 		return children;
 	}
